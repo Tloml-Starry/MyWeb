@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊天机器人功能介绍</title>
+    <style>
+        :root {
+            --primary: #6200ee;
+            --primary-dark: #3700b3;
+            --secondary: #03dac6;
+            --background: #121212;
+            --surface: #1e1e1e;
+            --on-background: #e0e0e0;
+            --on-surface: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--on-background);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: var(--on-surface);
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card h3 {
+            color: var(--secondary);
+            margin-top: 0;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            margin-bottom: 0;
+            color: var(--on-background);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--surface);
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-links a {
+            color: var(--on-surface);
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .contact-links a:hover {
+            background-color: var(--primary);
+            color: var(--on-surface);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>智能聊天助手</h1>
+            <p class="subtitle">您的全天候AI伙伴，为您提供卓越的对话体验</p>
+        </header>
+
+        <main>
+            <section>
+                <h2>核心功能</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>智能对话</h3>
+                        <p>基于先进的自然语言处理技术，提供流畅、自然的对话体验，让您感受真实的交流。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>快速响应</h3>
+                        <p>毫秒级响应速度，确保用户获得即时反馈，提高交互效率和用户满意度。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>多语言支持</h3>
+                        <p>支持多种语言，实现跨语言交流无障碍，让全球用户都能轻松使用。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>情感分析</h3>
+                        <p>识别用户情绪，提供个性化回应，增强对话的情感共鸣和理解。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>自定义回复</h3>
+                        <p>根据特定关键词设置自动回复，满足个性化需求，提高对话的针对性。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>数据分析</h3>
+                        <p>提供详细的使用统计和洞察，助力决策优化，不断改进服务质量。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>高级功能</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>API集成</h3>
+                        <p>轻松集成第三方API，扩展机器人功能，实现更多样化的服务。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>角色扮演</h3>
+                        <p>支持多种预设角色，增强互动趣味性，为用户带来丰富多彩的对话体验。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>语音交互</h3>
+                        <p>支持语音输入和输出，提供更自然的交互方式，让对话更加便捷。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>图像识别</h3>
+                        <p>能够识别和描述用户发送的图片内容，增强多媒体交互能力。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>实时翻译</h3>
+                        <p>在对话中提供实时翻译服务，打破语言障碍，促进全球沟通。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>任务提醒</h3>
+                        <p>设置和管理提醒事项，帮助用户保持高效，成为贴心的个人助理。</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <h2>联系我们</h2>
+            <div class="contact-links">
+                <a href="mailto:info@chatbot.com">电子邮件</a>
+                <a href="https://github.com/chatbot" target="_blank">GitHub</a>
+                <a href="https://twitter.com/chatbot" target="_blank">Twitter</a>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
