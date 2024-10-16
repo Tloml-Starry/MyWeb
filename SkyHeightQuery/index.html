@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光遇角色信息查询</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="dark-mode-container">
+        <span id="darkModeTooltip" class="dark-mode-tooltip">切换深色模式</span>
+        <button id="darkModeToggle">🌓</button>
+    </div>
+    <h1>光遇角色信息查询</h1>
+
+    <div class="input-group">
+        <div style="flex-grow: 1;">
+            <label for="apiKey">API密钥:</label>
+            <input type="text" id="apiKey" name="apiKey">
+        </div>
+        <button onclick="saveApiKey()">保存密钥</button>
+        <a href="https://api.t1qq.com/" target="_blank" class="no-key-link">没有Key点我</a>
+    </div>
+
+    <div class="input-group">
+        <label for="skyId">光遇长字段ID:</label>
+        <input type="text" id="skyId" name="skyId">
+    </div>
+
+    <div class="input-group">
+        <label for="inviteCode">好友邀请码(首次查询必填):</label>
+        <input type="text" id="inviteCode" name="inviteCode">
+    </div>
+
+    <div class="query-button">
+        <button onclick="checkSkyHeight()">查询</button>
+    </div>
+    <div id="loadingMessage">查询中，请稍等片刻...</div>
+    <div id="skyResult"></div>
+
+    <footer>
+        <p>加入我们的社区：</p>
+        <p><a href="https://qm.qq.com/q/1bZ5lnGlb" target="_blank">加入QQ群【Tloml-Starry】</a></p>
+        <p><a href="https://qm.qq.com/q/F9v743kcTK" target="_blank">添加我为QQ好友</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
