@@ -176,6 +176,7 @@
             <button class="tab active" role="tab" aria-selected="true" data-person="My">My</button>
             <button class="tab" role="tab" aria-selected="false" data-person="Father">Father</button>
             <button class="tab" role="tab" aria-selected="false" data-person="Yue">Yue</button>
+            <button class="tab" role="tab" aria-selected="false" data-person="Luo">Luo</button>
         </div>
         <div class="timer" id="timerContent" aria-live="polite"></div>
     </div>
@@ -184,7 +185,8 @@
         const timersData = [
             { name: "My", birthDate: "2006-10-17" },
             { name: "Father", birthDate: "1986-08-01" },
-            { name: "Yue", birthDate: "2006-05-01" }
+            { name: "Yue", birthDate: "2006-05-01" },
+            { name: "Luo", birthDate: "2005-04-26" }
         ];
 
         function calculateTime(birthDate) {
