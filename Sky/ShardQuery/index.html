@@ -1,180 +1,266 @@
-<style>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背景图片轮换日历</title>
+    <style>
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #f0f4f8;
-            --text-color: #333;
-            --accent-red: #ff6b6b;
-            --accent-black: #2d3436;
+            --bg-color: rgba(18, 18, 18, 0.7);
+            --surface-color: rgba(30, 30, 30, 0.8);
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --text-color: #ffffff;
+            --text-secondary-color: #b3b3b3;
+            --red-color: #cf6679;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            background-color: #e0e5ec;
             padding: 20px;
-        }
-        .calendar {
-            width: 100%;
-            max-width: 800px;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
             overflow: hidden;
         }
-        .header {
-            background: linear-gradient(135deg, var(--primary-color), #74b9ff);
-            color: white;
-            padding: 30px;
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .calendar {
+            background-color: var(--surface-color);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+            backdrop-filter: blur(10px);
+        }
+
+        .calendar-header {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            padding: 20px;
             text-align: center;
             position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .month-year {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+
+        .calendar-title {
+            font-size: 24px;
+            font-weight: bold;
         }
+
         .nav-button {
             background: none;
             border: none;
-            color: white;
-            font-size: 28px;
+            color: var(--bg-color);
             cursor: pointer;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 10px;
-            transition: all 0.3s ease;
+            font-size: 24px;
+            padding: 5px 10px;
+            transition: transform 0.3s ease;
         }
+
         .nav-button:hover {
-            transform: translateY(-50%) scale(1.1);
+            transform: scale(1.1);
         }
-        .prev-month {
-            left: 20px;
-        }
-        .next-month {
-            right: 20px;
-        }
-        .weekdays, .days {
+
+        .weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             text-align: center;
+            padding: 10px 0;
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--text-secondary-color);
         }
-        .weekdays {
-            font-weight: 600;
-            background-color: var(--secondary-color);
-            padding: 15px 0;
-            font-size: 18px;
-            color: var(--text-color);
+
+        .weekdays div {
+            font-weight: bold;
+            color: var(--text-secondary-color);
         }
+
         .days {
-            gap: 10px;
-            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            padding: 10px;
         }
+
         .day {
             aspect-ratio: 1;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            align-items: center;
+            align-items: flex-start;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             cursor: pointer;
-            border-radius: 15px;
-            position: relative;
-            padding: 10px;
-            min-height: 100px;
+            padding: 5px;
             transition: all 0.3s ease;
-            background-color: #f9f9f9;
-            overflow: hidden;
-            font-size: 14px;
         }
+
         .day:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
+
         .day.selected {
-            background-color: #4a90e2;
-            color: white;
-            border: 2px solid #e57373;
+            background-color: var(--secondary-color);
+            color: var(--bg-color);
         }
+
         .day-number {
-            font-weight: 700;
-            font-size: 20px;
+            font-size: 18px;
+            font-weight: bold;
             margin-bottom: 2px;
         }
-        .day-number.red {
-            color: #d32f2f;
+
+        .special-day {
+            font-size: 12px;
+            margin-bottom: 2px;
         }
-        .special-info {
-            font-size: 14px;
-            text-align: center;
+
+        .map-info, .time-info {
+            font-size: 10px;
             line-height: 1.2;
         }
+
+        .red-stone {
+            color: var(--red-color);
+        }
+
+        .selected-date-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid var(--text-secondary-color);
+        }
+
         .selected-date {
-            background-color: var(--secondary-color);
-            padding: 20px;
-            text-align: center;
-            font-size: 18px;
-            border-top: 1px solid #e0e0e0;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-        .selected-date .special-info {
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        .time-slots {
-            font-size: 9px;
-            text-align: center;
-            margin-top: 2px;
-            color: #555;
-        }
+
         @media (max-width: 600px) {
             .calendar {
                 max-width: 100%;
             }
-            .day {
-                min-height: 80px;
-                font-size: 14px;
-            }
-            .day-number {
-                font-size: 18px;
-            }
-            .special-info, .time-slots {
-                font-size: 10px;
-            }
-        }
-        @media (max-width: 400px) {
-            .day {
-                font-size: 12px;
-            }
+
             .day-number {
                 font-size: 16px;
             }
-            .special-info, .time-slots {
+
+            .special-day {
+                font-size: 10px;
+            }
+
+            .map-info, .time-info {
                 font-size: 8px;
             }
         }
-</style>
+    </style>
+</head>
 <body>
+    <div class="background-container">
+        <img class="background-image" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/background1-Rl9Iy9KLHDtbfbZBXbIVZZXZLZXZZZ.jpg" alt="背景图片1">
+        <img class="background-image" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/background2-0Iy9KLHDtbfbZBXbIVZZXZLZXZZZ.jpg" alt="背景图片2">
+        <img class="background-image" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/background3-9KLHDtbfbZBXbIVZZXZLZXZZZ.jpg" alt="背景图片3">
+        <div class="background-overlay"></div>
+    </div>
     <div class="calendar">
-        <div class="header">
+        <div class="calendar-header">
             <button class="nav-button prev-month" aria-label="上个月">&lt;</button>
-            <div class="month-year"></div>
+            <h1 class="calendar-title"></h1>
             <button class="nav-button next-month" aria-label="下个月">&gt;</button>
         </div>
         <div class="weekdays"></div>
         <div class="days"></div>
-        <div class="selected-date"></div>
+        <div class="selected-date-info"></div>
     </div>
 
     <script>
         const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
-        const weekDays = ["一", "二", "三", "四", "五", "六", "日"];
+        const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
         const mapSequence = ['暮土', '禁阁', '云野', '雨林', '霞谷'];
-        const timeSlots = '09:08-10:00<br>15:08-16:00<br>21:08-22:00';
         let currentDate = new Date();
-        let selectedDate = null;
+        let selectedDate = new Date();
+
+        const mapVariations = {
+            '云野': {
+                2: '云野图一',
+                3: '云野三塔图',
+                5: '云野右边隐藏图',
+                6: '云野左边隐藏图',
+                0: '云野圣岛'
+            },
+            '雨林': {
+                2: '雨林蘑菇图',
+                3: '雨林水母图',
+                5: '雨林大树屋',
+                6: '雨林神庙后',
+                0: '雨林8/8隐藏图'
+            },
+            '禁阁': {
+                2: '禁阁星漠',
+                3: '禁阁星漠',
+                5: '禁阁星漠搁浅船',
+                6: '禁阁星漠搁浅船',
+                0: '禁阁星漠搁浅船'
+            },
+            '霞谷': {
+                2: '霞谷滑冰场',
+                3: '霞谷滑冰场',
+                5: '霞谷圆梦村',
+                6: '霞谷圆梦村',
+                0: '霞谷雪隐峰'
+            },
+            '暮土': {
+                2: '暮土图一',
+                3: '暮土终点图',
+                5: '暮土沉船',
+                6: '暮土四龙图',
+                0: '暮土方舟图'
+            }
+        };
 
         function getMapForDay(day) {
             return mapSequence[(day - 1) % mapSequence.length];
@@ -183,7 +269,7 @@
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
-            document.querySelector('.month-year').textContent = `${year}年 ${monthNames[month]}`;
+            document.querySelector('.calendar-title').textContent = `${year}年 ${monthNames[month]}`;
             document.querySelector('.weekdays').innerHTML = weekDays.map(day => `<div>${day}</div>`).join('');
             const daysContainer = document.querySelector('.days');
             daysContainer.innerHTML = '';
@@ -191,48 +277,42 @@
             const firstDay = new Date(year, month, 1);
             const lastDay = new Date(year, month + 1, 0);
             const daysInMonth = lastDay.getDate();
-            const startingDay = firstDay.getDay() || 7;
+            const startingDay = firstDay.getDay();
 
-            for (let i = 1; i < startingDay; i++) {
+            for (let i = 0; i < startingDay; i++) {
                 daysContainer.innerHTML += '<div></div>';
             }
 
-            const today = new Date();
-
             for (let day = 1; day <= daysInMonth; day++) {
                 const date = new Date(year, month, day);
-                const { specialDay, map, landingTime } = getSpecialDay(date);
-                const dayElement = createDayElement(day, specialDay, map, date, today, landingTime);
+                const { specialDay, map, landingTimes } = getSpecialDay(date);
+                const dayElement = createDayElement(day, specialDay, map, landingTimes, date);
                 daysContainer.appendChild(dayElement);
             }
 
             updateSelectedDate();
         }
 
-        function createDayElement(day, specialDay, map, date, today, landingTime) {
+        function createDayElement(day, specialDay, map, landingTimes, date) {
             const dayElement = document.createElement('div');
             dayElement.classList.add('day');
-            let dayNumberClass = '';
+            let specialClass = '';
 
             if (specialDay === '红色碎石日') {
-                dayNumberClass = 'red';
-            } else if (specialDay === '黑色碎石日') {
-                dayNumberClass = 'black';
+                specialClass = 'red-stone';
             }
 
             dayElement.innerHTML = `
-                <div class="day-number ${dayNumberClass}">${day}</div>
+                <div class="day-number ${specialClass}">${day}</div>
                 ${specialDay ? `
-                    <div class="special-info">
-                        ${specialDay}<br>${map}
-                    </div>
-                    <div class="time-slots">${landingTime}</div>
+                    <div class="special-day ${specialClass}">${specialDay}</div>
+                    <div class="map-info">${map}</div>
+                    <div class="time-info">${landingTimes}</div>
                 ` : ''}
             `;
             dayElement.addEventListener('click', () => selectDate(date));
-            if (date.toDateString() === today.toDateString()) {
+            if (date.toDateString() === selectedDate.toDateString()) {
                 dayElement.classList.add('selected');
-                selectDate(date);
             }
             return dayElement;
         }
@@ -242,89 +322,33 @@
             const dayOfWeek = date.getDay();
             let specialDay = null;
             let map = getMapForDay(day);
-            let landingTime = '';
+            let landingTimes = '';
 
-            if (map === '云野') {
-                if (dayOfWeek === 2) {
-                    map = '云野图一';
-                } else if (dayOfWeek === 3) {
-                    map = '云野三塔图';
-                } else if (dayOfWeek === 5) {
-                    map = '云野右边隐藏图';
-                } else if (dayOfWeek === 6) {
-                    map = '云野左边隐藏图';
-                } else if (dayOfWeek === 0) {
-                    map = '云野圣岛';
-                }
-            }
-
-            if (map === '雨林') {
-                if (dayOfWeek === 2) {
-                    map = '雨林蘑菇图';
-                } else if (dayOfWeek === 3) {
-                    map = '雨林水母图';
-                } else if (dayOfWeek === 5) {
-                    map = '雨林大树屋';
-                } else if (dayOfWeek === 6) {
-                    map = '雨林神庙后';
-                } else if (dayOfWeek === 0) {
-                    map = '雨林8/8隐藏图';
-                }
-            }
-
-            if (map === '禁阁') {
-                if (dayOfWeek === 2 || dayOfWeek === 3) {
-                    map = '禁阁星漠';
-                } else if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
-                    map = '禁阁星漠搁浅船';
-                }
-            }
-
-            if (map === '霞谷') {
-                if (dayOfWeek === 2 || dayOfWeek === 3) {
-                    map = '霞谷滑冰场';
-                } else if (dayOfWeek === 5 || dayOfWeek === 6) {
-                    map = '霞谷圆梦村';
-                } else if (dayOfWeek === 0) {
-                    map = '霞谷雪隐峰';
-                }
-            }
-
-            if (map === '暮土') {
-                if (dayOfWeek === 2) {
-                    map = '暮土图一';
-                } else if (dayOfWeek === 3) {
-                    map = '暮土终点图';
-                } else if (dayOfWeek === 5) {
-                    map = '暮土沉船';
-                } else if (dayOfWeek === 6) {
-                    map = '暮土四龙图';
-                } else if (dayOfWeek === 0) {
-                    map = '暮土方舟图';
-                }
+            if (mapVariations[map] && mapVariations[map][dayOfWeek]) {
+                map = mapVariations[map][dayOfWeek];
             }
 
             if (day <= 15) {
                 specialDay = getSpecialDayType(dayOfWeek, [2], [6, 0]);
                 if (dayOfWeek === 2) {
-                    landingTime = '(09:08—10:00)<br>(14:08—15:00)<br>(19:08—20:00)';
+                    landingTimes = '09:08, 14:08, 19:08';
                 } else if (dayOfWeek === 6) {
-                    landingTime = '(10:08—11:00)<br>(14:08—15:00)<br>(22:08—23:00)';
+                    landingTimes = '10:08, 14:08, 22:08';
                 } else if (dayOfWeek === 0) {
-                    landingTime = '(07:08—08:00)<br>(13:08—14:00)<br>(19:08—20:00)';
+                    landingTimes = '07:08, 13:08, 19:08';
                 }
             } else {
                 specialDay = getSpecialDayType(dayOfWeek, [3], [5, 0]);
                 if (dayOfWeek === 3) {
-                    landingTime = '(09:08—10:00)<br>(15:08—16:00)<br>(21:08—22:00)';
+                    landingTimes = '09:08, 15:08, 21:08';
                 } else if (dayOfWeek === 5) {
-                    landingTime = '(11:08—12:00)<br>(17:08—18:00)<br>(23:08—24:00)';
+                    landingTimes = '11:08, 17:08, 23:08';
                 } else if (dayOfWeek === 0) {
-                    landingTime = '(07:08—08:00)<br>(13:08—14:00)<br>(19:08—20:00)';
+                    landingTimes = '07:08, 13:08, 19:08';
                 }
             }
 
-            return { specialDay, map, landingTime };
+            return { specialDay, map, landingTimes };
         }
 
         function getSpecialDayType(dayOfWeek, blackDays, redDays) {
@@ -336,32 +360,20 @@
         function selectDate(date) {
             selectedDate = date;
             updateSelectedDate();
+            renderCalendar();
         }
 
         function updateSelectedDate() {
-            const selectedDateContainer = document.querySelector('.selected-date');
-            if (selectedDate) {
-                const { specialDay, map, landingTime } = getSpecialDay(selectedDate);
-                selectedDateContainer.innerHTML = `
-                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 10px;">
-                        ${selectedDate.getFullYear()}年${selectedDate.getMonth() + 1}月${selectedDate.getDate()}日
-                    </div>
-                    ${specialDay ? `
-                        <div class="special-info">
-                            <div style="font-size: 20px; font-weight: 600; margin-bottom: 5px;">
-                                今日石头: ${specialDay === '红色碎石日' ? '红石' : '黑石'}
-                            </div>
-                            <div style="margin-bottom: 5px;">降落地图：${map}</div>
-                            <div>降落时间段<br>${landingTime}</div>
-                        </div>
-                    ` : `<div>今日非碎石日，地图：${map}</div>`}
-                `;
-                document.querySelectorAll('.day').forEach(day => {
-                    day.classList.toggle('selected', parseInt(day.querySelector('.day-number').textContent) === selectedDate.getDate());
-                });
-            } else {
-                selectedDateContainer.innerHTML = '';
-            }
+            const selectedDateContainer = document.querySelector('.selected-date-info');
+            const { specialDay, map, landingTimes } = getSpecialDay(selectedDate);
+            selectedDateContainer.innerHTML = `
+                <div class="selected-date">${selectedDate.getFullYear()}年${selectedDate.getMonth() + 1}月${selectedDate.getDate()}日</div>
+                ${specialDay ? `
+                    <div>今日石头: ${specialDay}</div>
+                    <div>降落地图: ${map}</div>
+                    <div>降落时间: ${landingTimes}</div>
+                ` : `<div>今日非碎石日，地图：${map}</div>`}
+            `;
         }
 
         document.querySelector('.prev-month').addEventListener('click', () => {
@@ -375,5 +387,19 @@
         });
 
         renderCalendar();
+
+        // 背景图片轮换
+        const backgroundImages = document.querySelectorAll('.background-image');
+        let currentImageIndex = 0;
+
+        function changeBackgroundImage() {
+            backgroundImages[currentImageIndex].style.opacity = '0';
+            currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+            backgroundImages[currentImageIndex].style.opacity = '1';
+        }
+
+        setInterval(changeBackgroundImage, 10000);
+        backgroundImages[0].style.opacity = '1';
     </script>
 </body>
+</html>
