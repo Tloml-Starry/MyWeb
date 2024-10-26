@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
             --button-bg: #3498db;
             --button-hover: #2980b9;
         }
+
         body {
             font-family: 'Arial', sans-serif;
             background-color: var(--bg-color);
@@ -27,6 +29,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         .container {
             max-width: 800px;
             width: 100%;
@@ -36,12 +39,14 @@
             display: flex;
             flex-direction: column;
         }
+
         .title {
             text-align: center;
             font-size: 2em;
             margin-bottom: 20px;
             color: var(--highlight);
         }
+
         .calendar-container {
             background-color: var(--calendar-bg);
             border-radius: 10px;
@@ -49,16 +54,19 @@
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
             flex-grow: 1;
         }
+
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .month-nav {
             display: flex;
             gap: 10px;
         }
+
         .month-nav button {
             background-color: var(--button-bg);
             color: var(--text-color);
@@ -68,24 +76,31 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         .month-nav button:hover {
             background-color: var(--button-hover);
         }
+
         .current-month {
             font-size: 1.5em;
         }
-        .weekdays, .calendar {
+
+        .weekdays,
+        .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 5px;
         }
+
         .weekdays {
             margin-bottom: 10px;
         }
+
         .weekday {
             text-align: center;
             font-weight: bold;
         }
+
         .day {
             background-color: var(--calendar-bg);
             border-radius: 5px;
@@ -96,10 +111,12 @@
             position: relative;
             overflow: hidden;
         }
+
         .day:hover {
             transform: scale(1.05);
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
+
         .day::before {
             content: '';
             position: absolute;
@@ -112,34 +129,44 @@
             opacity: 0;
             transition: transform 0.3s, opacity 0.3s;
         }
+
         .day:active::before {
             transform: scale(0);
             opacity: 1;
             transition: 0s;
         }
+
         .black-stone {
             background-color: var(--black-stone);
         }
+
         .red-stone {
             background-color: var(--red-stone);
         }
+
         .other-month {
             opacity: 0.5;
         }
+
         .today {
             border: 2px solid var(--highlight);
         }
+
         .selected {
             background-color: var(--highlight);
         }
+
         .date {
             font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .map, .location {
+
+        .map,
+        .location {
             font-size: 0.8em;
         }
+
         .detail-box {
             margin-top: 20px;
             padding: 15px;
@@ -148,21 +175,25 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
+
         .detail-box:hover {
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
+
         footer {
             background-color: var(--calendar-bg);
             padding: 20px;
             text-align: center;
             margin-top: 20px;
         }
+
         .contact-info {
             display: flex;
             justify-content: center;
             gap: 20px;
             margin-top: 10px;
         }
+
         .contact-info a {
             color: var(--text-color);
             text-decoration: none;
@@ -170,14 +201,19 @@
             align-items: center;
             gap: 5px;
         }
+
         .contact-info a:hover {
             color: var(--highlight);
         }
-        .ri-github-fill, .ri-mail-fill, .ri-qq-fill {
+
+        .ri-github-fill,
+        .ri-mail-fill,
+        .ri-qq-fill {
             font-size: 1.2em;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1 class="title">光遇碎石日历</h1>
@@ -217,6 +253,34 @@
                     5: '右边隐藏图',
                     6: '左边隐藏图',
                     0: '圣岛'
+                },
+                '雨林': {
+                    2: '雨林蘑菇图',
+                    3: '雨林水母图',
+                    5: '雨林大树屋',
+                    6: '雨林神庙后',
+                    0: '雨林8/8隐藏图'
+                },
+                '禁阁': {
+                    2: '禁阁星漠',
+                    3: '禁阁星漠',
+                    5: '禁阁星漠搁浅船',
+                    6: '禁阁星漠搁浅船',
+                    0: '禁阁星漠搁浅船'
+                },
+                '霞谷': {
+                    2: '霞谷滑冰场',
+                    3: '霞谷滑冰场',
+                    5: '霞谷圆梦村',
+                    6: '霞谷圆梦村',
+                    0: '霞谷雪隐峰'
+                },
+                '暮土': {
+                    2: '暮土图一',
+                    3: '暮土终点图',
+                    5: '暮土沉船',
+                    6: '暮土四龙图',
+                    0: '暮土方舟图'
                 }
             };
             return locations[map] ? locations[map][dayOfWeek] || '' : '';
@@ -373,9 +437,9 @@
                 let diff = nextFallTime - now;
 
                 if (diff < 0) {
-                    countdownElement.textContent = 
+                    countdownElement.textContent =
 
- '坠落已结束';
+                        '坠落已结束';
                     return;
                 }
 
@@ -412,4 +476,5 @@
         }, 1000);
     </script>
 </body>
+
 </html>
