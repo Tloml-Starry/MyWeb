@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 
@@ -211,6 +212,15 @@
         .ri-qq-fill {
             font-size: 1.2em;
         }
+
+        .counter {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            width: 100px; /* 调整宽度 */
+            height: auto; /* 保持宽高比 */
+            z-index: 1000; /* 确保在其他元素之上 */
+        }
     </style>
     <script>
     var _hmt = _hmt || [];
@@ -239,7 +249,7 @@
             <div class="detail-box" id="detailBox"></div>
         </div>
     </div>
-    <img src="https://count.kjchmc.cn/get/@SkyShardQuery" alt="计数器" />
+    <img src="https://count.kjchmc.cn/get/@SkyShardQuery" alt="计数器" class="counter" />
     <footer>
         <div class="contact-info">
             <a href="https://github.com/Tloml-Starry" target="_blank"><i class="ri-github-fill"></i> GitHub</a>
@@ -435,7 +445,7 @@
             let nextFallTime = todayFallTimes.find(time => time > now);
 
             if (!nextFallTime) {
-                // 如果今天的所有时间都过了，计算到明天的第一个坠落时间
+                // 如���今天的所有时间都过了，计算到明天的第一个坠落时间
                 const tomorrow = new Date(selectedDate);
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 const [hours, minutes] = fallTimes[0].split(':').map(Number);
