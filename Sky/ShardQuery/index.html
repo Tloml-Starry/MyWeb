@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 
@@ -217,19 +216,37 @@
             position: fixed;
             bottom: 10px;
             left: 10px;
-            width: 100px; /* 调整宽度 */
-            height: auto; /* 保持宽高比 */
-            z-index: 1000; /* 确保在其他元素之上 */
+            width: 100px;
+            /* 调整宽度 */
+            height: auto;
+            /* 保持宽高比 */
+            z-index: 1000;
+            /* 确保在其他元素之上 */
+        }
+
+        /* 添加按钮样式 */
+        .route-button {
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .route-button:hover {
+            background-color: var(--button-hover);
         }
     </style>
     <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?a6604428a5c563d802a0240f431bb3d2";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?a6604428a5c563d802a0240f431bb3d2";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
     </script>
 </head>
 
@@ -247,6 +264,7 @@
             <div class="weekdays" id="weekdays"></div>
             <div class="calendar" id="calendar"></div>
             <div class="detail-box" id="detailBox"></div>
+            <div class="detail-box" id="routeMap" style="text-align: center; margin-top: 20px;"></div>
         </div>
     </div>
     <img src="https://count.kjchmc.cn/get/@SkyShardQuery" alt="计数器" class="counter" />
@@ -279,7 +297,7 @@
                     3: '雨林水母图',
                     5: '雨林大树屋',
                     6: '雨林神庙后',
-                    0: '雨林8/8隐藏图'
+                    0: '林8/8隐藏图'
                 },
                 '禁阁': {
                     2: '禁阁星漠',
@@ -303,7 +321,23 @@
                     0: '暮土方舟图'
                 }
             };
-            return locations[map] ? locations[map][dayOfWeek] || '' : '';
+
+            const images = {
+                '霞谷': {
+                    5: 'https://gitee.com/Tloml-Starry/resources/raw/master/resources/img/%E5%85%89%E9%81%87/ShardRouteMap/%E5%9C%86%E6%A2%A6%E6%9D%91.jpg',
+                    6: 'https://gitee.com/Tloml-Starry/resources/raw/master/resources/img/%E5%85%89%E9%81%87/ShardRouteMap/%E5%9C%86%E6%A2%A6%E6%9D%91.jpg'
+                },
+                '禁阁': {
+                    5: 'https://gitee.com/Tloml-Starry/resources/raw/master/resources/img/%E5%85%89%E9%81%87/ShardRouteMap/%E6%98%9F%E5%85%89%E6%B2%99%E6%BC%A0%C2%B7%E4%B8%80%E9%9A%85.jpg',
+                    6: 'https://gitee.com/Tloml-Starry/resources/raw/master/resources/img/%E5%85%89%E9%81%87/ShardRouteMap/%E6%98%9F%E5%85%89%E6%B2%99%E6%BC%A0%C2%B7%E4%B8%80%E9%9A%85.jpg',
+                    0: 'https://gitee.com/Tloml-Starry/resources/raw/master/resources/img/%E5%85%89%E9%81%87/ShardRouteMap/%E6%98%9F%E5%85%89%E6%B2%99%E6%BC%A0%C2%B7%E4%B8%80%E9%9A%85.jpg'
+                }
+            };
+
+            const location = locations[map] ? locations[map][dayOfWeek] || '' : '';
+            const image = images[map] ? images[map][dayOfWeek] || '空' : '空';
+
+            return { location, image };
         }
 
         function isSpecialDate(date) {
@@ -384,7 +418,7 @@
 
                     const locationElement = document.createElement('div');
                     locationElement.className = 'location';
-                    locationElement.textContent = getMapLocation(maps[mapIndex], dayOfWeek);
+                    locationElement.textContent = getMapLocation(maps[mapIndex], dayOfWeek).location;
                     dayElement.appendChild(locationElement);
                 }
 
@@ -403,15 +437,17 @@
 
         function updateDetailBox() {
             const detailBox = document.getElementById('detailBox');
+            const routeMap = document.getElementById('routeMap');
             const isSpecial = isSpecialDate(selectedDate);
             const stoneType = getStoneType(selectedDate);
             const dayOfWeek = selectedDate.getDay();
             const mapIndex = (selectedDate.getDate() - 1) % 5;
             const map = maps[mapIndex];
-            const location = getMapLocation(map, dayOfWeek);
+            const { location, image } = getMapLocation(map, dayOfWeek);
 
             if (!isSpecial) {
                 detailBox.innerHTML = '<p>今日无碎石</p>';
+                routeMap.innerHTML = '';
                 return;
             }
 
@@ -427,9 +463,66 @@
                 ${isPastDate ? '<p>坠落已结束</p>' : '<p id="countdown"></p>'}
             `;
 
+            if (image !== '空') {
+                routeMap.innerHTML = `
+                    <button class="route-button" onclick="showRouteMap('${image}')">查看路线图</button>
+                `;
+            } else {
+                routeMap.innerHTML = '';
+            }
+
             if (!isPastDate) {
                 updateCountdown();
             }
+        }
+
+        function showRouteMap(imageUrl) {
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+            modal.style.zIndex = '1000';
+            modal.style.overflow = 'hidden';
+
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.maxWidth = '90%';
+            img.style.maxHeight = '90%';
+            img.style.border = '5px solid var(--highlight)';
+            img.style.cursor = 'zoom-in';
+            img.style.transition = 'transform 0.3s ease';
+            img.style.transformOrigin = 'center center';
+
+            let scale = 1;
+            const scales = [1.5, 1.75, 2, 1];
+
+            img.addEventListener('click', (e) => {
+                const rect = img.getBoundingClientRect();
+                const offsetX = e.clientX - rect.left;
+                const offsetY = e.clientY - rect.top;
+
+                scale = scales[(scales.indexOf(scale) + 1) % scales.length];
+                img.style.transformOrigin = `${(offsetX / rect.width) * 100}% ${(offsetY / rect.height) * 100}%`;
+                img.style.transform = `scale(${scale})`;
+
+                img.style.cursor = scale === 1 ? 'zoom-in' : 'zoom-out';
+            });
+
+            modal.appendChild(img);
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+
+            document.body.appendChild(modal);
         }
 
         function updateCountdown() {
@@ -445,7 +538,7 @@
             let nextFallTime = todayFallTimes.find(time => time > now);
 
             if (!nextFallTime) {
-                // 如���今天的所有时间都过了，计算到明天的第一个坠落时间
+                // 如今的所有时间都过了，计算到明天的第一个坠落时间
                 const tomorrow = new Date(selectedDate);
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 const [hours, minutes] = fallTimes[0].split(':').map(Number);
