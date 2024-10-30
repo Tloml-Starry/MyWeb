@@ -271,6 +271,7 @@
         let selectedDate = new Date();
 
         function getMapLocation(map, dayOfWeek) {
+            const imageUrl = 'https://gitee.com/Tloml-Starry/resources/raw/master/resources/img/%E5%85%89%E9%81%87/ShardRouteMap/'
             const locations = {
                 '云野': {
                     2: { mapName: '云野图一', mapImage: '' },
@@ -287,15 +288,15 @@
                     0: { mapName: '雨林8/8隐藏图', mapImage: '' }
                 },
                 '霞谷': {
-                    2: { mapName: '霞谷滑冰场', mapImage: '' },
-                    3: { mapName: '霞谷滑冰场', mapImage: '' },
+                    2: { mapName: '滑冰场', mapImage: `${imageUrl}滑冰场.jpg` },
+                    3: { mapName: '滑冰场', mapImage: `${imageUrl}滑冰场.jpg` },
                     5: {
                         mapName: '圆梦村',
-                        mapImage: 'https://my-web-opal-tau.vercel.app/Sky/ShardQuery/圆梦村.jpg'
+                        mapImage: `${imageUrl}圆梦村.jpg`
                     },
                     6: {
                         mapName: '圆梦村',
-                        mapImage: 'https://my-web-opal-tau.vercel.app/Sky/ShardQuery/圆梦村.jpg'
+                        mapImage: `${imageUrl}圆梦村.jpg`
                     },
                     0: { mapName: '霞谷雪隐峰', mapImage: '' }
                 },
@@ -311,15 +312,15 @@
                     3: { mapName: '星光沙漠', mapImage: '' },
                     5: {
                         mapName: '星光沙漠·一隅',
-                        mapImage: 'https://my-web-opal-tau.vercel.app/Sky/ShardQuery/星光沙漠·一隅.jpg'
+                        mapImage: `${imageUrl}星光沙漠·一隅.jpg`
                     },
                     6: {
                         mapName: '星光沙漠·一隅',
-                        mapImage: 'https://my-web-opal-tau.vercel.app/Sky/ShardQuery/星光沙漠·一隅.jpg'
+                        mapImage: `${imageUrl}星光沙漠·一隅.jpg`
                     },
                     0: {
                         mapName: '星光沙漠·一隅',
-                        mapImage: 'https://my-web-opal-tau.vercel.app/Sky/ShardQuery/星光沙漠·一隅.jpg'
+                        mapImage: `${imageUrl}星光沙漠·一隅.jpg`
                     }
                 },
             };
@@ -431,7 +432,9 @@
             const dayOfWeek = selectedDate.getDay();
             const mapIndex = (selectedDate.getDate() - 1) % 5;
             const map = maps[mapIndex];
+            console.log(map + dayOfWeek);
             const { location, image } = getMapLocation(map, dayOfWeek);
+            console.log(image);
 
             if (!isSpecial) {
                 detailBox.innerHTML = '<p>今日无碎石</p>';
@@ -453,7 +456,7 @@
 
             if (image !== '空') {
                 routeMap.innerHTML = `
-                    <button type="button" class="route-button" onclick="showRouteMap('${image}')">查看路线图</button>
+                    <button type="button" class="route-button" onclick="window.open('${image}', '_blank')">查看路线图</button>
                 `;
             } else {
                 routeMap.innerHTML = '';
