@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>炼药锅活动倒计时</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            color: #333;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .stage {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #e53e3e;
+            margin-bottom: 1rem;
+        }
+        .timer {
+            font-size: 2.5rem;
+            font-family: monospace;
+            margin-bottom: 1rem;
+        }
+        .next-stage {
+            margin-top: 0.5rem;
+            color: #4a5568;
+        }
+        .info-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: none;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            width: 2rem;
+            height: 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .timeline {
+            margin-top: 1rem;
+        }
+        .cycle {
+            margin-bottom: 1rem;
+        }
+        .cycle h4 {
+            margin-bottom: 0.5rem;
+        }
+        .stage-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+        .stage-color {
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+        .stage-time {
+            margin-left: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .bubbling { width: 6rem; background-color: #4299e1; }
+        .erupting { width: 12rem; background-color: #f56565; }
+        .dormant { width: 18.75rem; background-color: #a0aec0; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>炼药锅活动倒计时</h1>
+        <div id="stage" class="stage"></div>
+        <div id="timer" class="timer"></div>
+        <p id="nextStage" class="next-stage"></p>
+        <button id="infoButton" class="info-button">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </button>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>炼药锅活动时间段详情</h2>
+            <div id="timeline" class="timeline"></div>
+        </div>
+    </div>
+
+    <script>
+        function updateCountdown() {
+            const now = new Date();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const totalSeconds = minutes * 60 + seconds;
+            const cycleSeconds = totalSeconds % 480;
+
+            let stage, nextStage, timeLeft;
+
+            if (cycleSeconds < 60) {
+                stage = '冒泡';
+                nextStage = '喷发';
+                timeLeft = 60 - (cycleSeconds % 60);
+            } else if (cycleSeconds < 180) {
+                stage = '喷发';
+                nextStage = '休眠';
+                timeLeft = 180 - (cycleSeconds % 180);
+            } else {
+                stage = '休眠';
+                nextStage = '冒泡';
+                timeLeft = 480 - (cycleSeconds % 480);
+            }
+
+            const minutesLeft = Math.floor(timeLeft / 60);
+            const secondsLeft = timeLeft % 60;
+
+            document.getElementById('stage').textContent = stage;
+            document.getElementById('timer').textContent = `${minutesLeft.toString().padStart(2, '0')}:${secondsLeft.toString().padStart(2, '0')}`;
+            document.getElementById('nextStage').textContent = `距离下一阶段 ${nextStage} 还有 ${minutesLeft} 分 ${secondsLeft} 秒`;
+        }
+
+        function createTimeline() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+
+            for (let i = 0; i < 8; i++) {
+                const startMinute = i * 8;
+                const cycle = document.createElement('div');
+                cycle.className = 'cycle';
+                cycle.innerHTML = `
+                    <h4>${startMinute.toString().padStart(2, '0')}:00 - ${(startMinute + 8).toString().padStart(2, '0')}:00</h4>
+                    <div class="stage-bar">
+                        <div class="stage-color bubbling">冒泡</div>
+                        <span class="stage-time">${startMinute.toString().padStart(2, '0')}:00 - ${startMinute.toString().padStart(2, '0')}:59</span>
+                    </div>
+                    <div class="stage-bar">
+                        <div class="stage-color erupting">喷发</div>
+                        <span class="stage-time">${(startMinute + 1).toString().padStart(2, '0')}:00 - ${(startMinute + 2).toString().padStart(2, '0')}:59</span>
+                    </div>
+                    <div class="stage-bar">
+                        <div class="stage-color dormant">休眠</div>
+                        <span class="stage-time">${(startMinute + 3).toString().padStart(2, '0')}:00 - ${(startMinute + 7).toString().padStart(2, '0')}:59</span>
+                    </div>
+                `;
+                timeline.appendChild(cycle);
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        createTimeline();
+
+        const modal = document.getElementById('modal');
+        const infoButton = document.getElementById('infoButton');
+        const closeButton = document.getElementsByClassName('close')[0];
+
+        infoButton.onclick = function() {
+            modal.style.display = 'block';
+        }
+
+        closeButton.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
