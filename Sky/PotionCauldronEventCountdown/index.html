@@ -196,7 +196,7 @@
                     </div>
                     <div class="stage-bar">
                         <div class="stage-color dormant">休眠</div>
-                        <span class="stage-time">${(startMinute + 3).toString().padStart(2, '0')}:00 - ${(startMinute + 7).toString().padStart(2, '0')}:59</span>
+                        <span class="stage-time">${(startMinute + 3).toString().padStart(2, '0')}:00 - ${(startMinute + 7).toString().padStart(2, '0') === '63' ? '59' : (startMinute + 7).toString().padStart(2, '0')}:59</span>
                     </div>
                 `;
                 timeline.appendChild(cycle);
