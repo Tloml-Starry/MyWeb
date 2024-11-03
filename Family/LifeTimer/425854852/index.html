@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Timer</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #e2e8f0;
+            --accent-color: #fbbf24;
+            --tab-active: #fbbf24;
+            --tab-inactive: rgba(255, 255, 255, 0.5);
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            width: 90%;
+            max-width: 800px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            border-radius: 50px;
+            outline: none;
+        }
+
+        .tab.active {
+            background: var(--tab-active);
+            color: #1a202c;
+            transform: scale(1.05);
+        }
+
+        .timer {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .timer.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timer h2 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .total-days {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .time-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .time-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .time-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .time-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .time-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .total-days {
+                font-size: 3rem;
+            }
+
+            .time-value {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .time-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Life Timer</h1>
+        <div class="tabs" role="tablist">
+            <button class="tab active" role="tab" aria-selected="true" data-person="言">言</button>
+        </div>
+        <div class="timer" id="timerContent" aria-live="polite"></div>
+    </div>
+
+    <script>
+        const timersData = [
+            { name: "言", birthDate: "2006-02-14" }
+        ];
+
+        function calculateTime(birthDate) {
+            const now = new Date();
+            const birth = new Date(birthDate);
+            const diff = now - birth;
+
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44));
+            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            return { years, months, days, hours, minutes, seconds, totalDays };
+        }
+
+        function updateTimer(person) {
+            const time = calculateTime(person.birthDate);
+            const timerContent = document.getElementById('timerContent');
+
+            timerContent.innerHTML = `
+                <h2>${person.name} Life Timer</h2>
+                <div class="total-days">${time.totalDays.toLocaleString()} 天</div>
+                <div class="time-grid">
+                    <div class="time-item">
+                        <div class="time-value">${time.years}</div>
+                        <div class="time-label">年</div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-value">${time.months}</div>
+                        <div class="time-label">月</div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-value">${time.days}</div>
+                        <div class="time-label">日</div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-value">${time.hours}</div>
+                        <div class="time-label">小时</div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-value">${time.minutes}</div>
+                        <div class="time-label">分钟</div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-value">${time.seconds}</div>
+                        <div class="time-label">秒</div>
+                    </div>
+                </div>
+            `;
+
+            timerContent.classList.remove('show');
+            void timerContent.offsetWidth; // 触发重排
+            timerContent.classList.add('show');
+        }
+
+        function initializeTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                    });
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-selected', 'true');
+                    const person = timersData.find(p => p.name === tab.dataset.person);
+                    updateTimer(person);
+                });
+            });
+        }
+
+        function startTimer() {
+            const activePerson = timersData.find(p => p.name === document.querySelector('.tab.active').dataset.person);
+            updateTimer(activePerson);
+        }
+
+        initializeTabs();
+        startTimer();
+        setInterval(startTimer, 1000);
+    </script>
+</body>
+
+</html>
