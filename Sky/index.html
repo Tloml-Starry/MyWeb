@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光遇工具集合</title>
+    <style>
+        :root {
+            --bg-light: #f0f0f0;
+            --text-light: #333;
+            --card-bg-light: #fff;
+            --card-shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --button-bg-light: #3498db;
+            --button-text-light: #fff;
+
+            --bg-dark: #1a1a1a;
+            --text-dark: #f0f0f0;
+            --card-bg-dark: #2c2c2c;
+            --card-shadow-dark: 0 4px 6px rgba(255, 255, 255, 0.1);
+            --button-bg-dark: #2980b9;
+            --button-text-dark: #fff;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .tool-card {
+            background-color: var(--card-bg-light);
+            border-radius: 10px;
+            box-shadow: var(--card-shadow-light);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+        }
+
+        body.dark-mode .tool-card {
+            background-color: var(--card-bg-dark);
+            box-shadow: var(--card-shadow-dark);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .tool-icon {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #ffecd2);
+        }
+
+        .tool-info {
+            padding: 20px;
+        }
+
+        .tool-name {
+            margin: 0 0 10px;
+            font-size: 1.2em;
+        }
+
+        .tool-description {
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        .tool-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--button-bg-light);
+            color: var(--button-text-light);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode .tool-button {
+            background-color: var(--button-bg-dark);
+            color: var(--button-text-dark);
+        }
+
+        .tool-button:hover {
+            background-color: #2980b9;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background-color: #2980b9;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #f39c12;
+        }
+
+        body.dark-mode .theme-toggle:hover {
+            background-color: #d35400;
+        }
+
+        .colorful-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #ffecd2, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tool-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="colorful-bg"></div>
+    <div class="container">
+        <h1>光遇工具集合</h1>
+        <div class="tool-grid">
+            <div class="tool-card">
+                <div class="tool-icon">✅</div>
+                <div class="tool-info">
+                    <h2 class="tool-name">身高查询工具</h2>
+                    <p class="tool-description">查询光崽身高数值</p>
+                    <a href="https://Tloml-Starry.Github.io/MyWeb/Sky/HeightQuery/" class="tool-button">使用工具</a>
+                </div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">📆</div>
+                <div class="tool-info">
+                    <h2 class="tool-name">碎石日历工具</h2>
+                    <p class="tool-description">查询碎石降落日期，地图，路线图和降落时间等</p>
+                    <a href="https://Tloml-Starry.Github.io/MyWeb/Sky/ShardQuery/" class="tool-button">使用工具</a>
+                </div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">⏱️</div>
+                <div class="tool-info">
+                    <h2 class="tool-name">万圣节炼药锅活动倒计时</h2>
+                    <p class="tool-description">查询万圣节炼药锅啥时候喷烛火活动倒计时</p>
+                    <a href="https://Tloml-Starry.Github.io/MyWeb/Sky/PotionCauldronEventCountdown/" class="tool-button">使用工具</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="theme-toggle">切换主题</button>
+
+    <script>
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                themeToggle.textContent = '切换到浅色模式';
+            } else {
+                themeToggle.textContent = '切换到深色模式';
+            }
+        });
+    </script>
+</body>
+</html>
