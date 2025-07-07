@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>淇与琪</title>
+    <title id="page-title">淇与琪</title>
+    <link id="dynamic-favicon" rel="icon" type="image/png" href="https://q1.qlogo.cn/g?b=qq&nk=3620060826&s=640">
     <style>
         body {
             font-size: 28px;
@@ -254,6 +255,9 @@
     <div id="setting-panel">
         <h3 style="margin-bottom:18px;font-size:22px;">设置</h3>
         <div style="margin-bottom:14px;">
+            <label>网页标题: <input type="text" id="web-title" style="width:180px;"></label>
+        </div>
+        <div style="margin-bottom:14px;">
             <label><input type="checkbox" id="snow-toggle"> 雪花效果</label>
         </div>
         <div style="margin-bottom:10px;">
@@ -331,6 +335,7 @@
 
         // 初始化设置面板内容
         function updateSettingInputs() {
+            document.getElementById('web-title').value = document.title;
             document.getElementById('nk1').value = getNk(document.getElementById('avatar1').src);
             document.getElementById('nk2').value = getNk(document.getElementById('avatar2').src);
             document.getElementById('nick1').value = document.getElementById('nickname1').innerText;
@@ -349,6 +354,8 @@
 
         // 保存设置
         document.getElementById('save-setting').onclick = function () {
+            // 网页标题
+            document.title = document.getElementById('web-title').value;
             // 头像nk
             const nk1 = document.getElementById('nk1').value.trim();
             const nk2 = document.getElementById('nk2').value.trim();
@@ -357,6 +364,8 @@
             // 昵称
             document.getElementById('nickname1').innerText = document.getElementById('nick1').value;
             document.getElementById('nickname2').innerText = document.getElementById('nick2').value;
+            // 网页icon自动跟随第一个头像
+            document.getElementById('dynamic-favicon').href = `https://q1.qlogo.cn/g?b=qq&nk=${nk1}&s=640`;
             settingPanel.classList.remove('active');
         };
     </script>
