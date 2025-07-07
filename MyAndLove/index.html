@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>淇与琪</title>
+    <style>
+        body {
+            font-size: 28px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            display: flex;
+            gap: 0;
+            padding: 60px;
+            justify-content: center;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 36px;
+            padding: 60px 40px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12);
+            display: flex;
+            align-items: flex-start;
+            min-width: 300px;
+            flex-direction: column;
+            width: 300px;
+            margin: 0 32px;
+        }
+
+        .left-card {
+            align-items: flex-end;
+        }
+
+        .right-card {
+            align-items: flex-start;
+        }
+
+        .avatar-nickname {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 260px;
+            height: 260px;
+            border-radius: 24px;
+            border: 6px solid #fff;
+            object-fit: cover;
+            margin-bottom: 24px;
+        }
+
+        .nickname {
+            font-size: 38px;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                gap: 36px;
+                padding: 10px;
+            }
+
+            .profile-card {
+                width: 100%;
+                min-width: unset;
+                align-items: center !important;
+                padding: 32px 8px;
+            }
+
+            .left-card,
+            .right-card {
+                align-items: center !important;
+            }
+
+            .avatar {
+                width: 140px;
+                height: 140px;
+                border-radius: 14px;
+                border-width: 4px;
+                margin-bottom: 12px;
+            }
+
+            .nickname {
+                font-size: 22px;
+            }
+        }
+
+        /* 雪花样式 */
+        .snowflake {
+            position: fixed;
+            top: -40px;
+            color: #fff;
+            font-size: 1.2em;
+            pointer-events: none;
+            z-index: 9999;
+            user-select: none;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 2px #fff);
+        }
+
+        /* 设置面板弹窗美化 */
+        #setting-panel {
+            display: none;
+            position: fixed;
+            top: 70px;
+            right: 30px;
+            z-index: 10001;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 8px 40px 0 rgba(60, 60, 120, 0.18), 0 1.5px 8px 0 rgba(60, 60, 120, 0.10);
+            padding: 36px 32px 28px 32px;
+            min-width: 300px;
+            max-width: 90vw;
+            transition: transform 0.35s cubic-bezier(.4, 1.6, .6, 1), opacity 0.25s;
+            transform: translateY(-40px) scale(0.98);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #setting-panel.active {
+            display: block;
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            pointer-events: auto;
+            animation: popIn 0.35s cubic-bezier(.4, 1.6, .6, 1);
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-40px) scale(0.98);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        #setting-panel h3 {
+            margin-bottom: 18px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #4b3fa7;
+            letter-spacing: 1px;
+        }
+
+        #setting-panel label {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        #setting-panel input[type="text"] {
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 18px;
+            margin-left: 6px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        #setting-panel input[type="text"]:focus {
+            border: 1.5px solid #764ba2;
+            background: #f5f3ff;
+        }
+
+        #setting-panel input[type="checkbox"] {
+            transform: scale(1.3);
+            margin-right: 8px;
+            accent-color: #764ba2;
+        }
+
+        #setting-panel button {
+            margin-top: 10px;
+            padding: 7px 22px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(118, 75, 162, 0.08);
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+        }
+
+        #setting-panel button:hover {
+            background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+            box-shadow: 0 4px 16px rgba(118, 75, 162, 0.18);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        #close-setting {
+            background: #e0e7ef;
+            color: #764ba2;
+            margin-left: 12px;
+        }
+
+        #close-setting:hover {
+            background: #f3f0fa;
+            color: #4b3fa7;
+        }
+
+        #setting-btn {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 10000;
+            opacity: 0.2;
+            background: #fff;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(118, 75, 162, 0.10);
+            font-size: 26px;
+        }
+
+        #setting-btn:hover {
+            opacity: 1;
+            box-shadow: 0 4px 16px rgba(118, 75, 162, 0.18);
+        }
+    </style>
+</head>
+
+<body>
+    <button id="setting-btn"
+        style="position:fixed;top:18px;right:18px;z-index:10000;opacity:0.2;background:#fff;border-radius:50%;width:44px;height:44px;border:none;cursor:pointer;transition:opacity 0.2s;">⚙️</button>
+    <div id="setting-panel">
+        <h3 style="margin-bottom:18px;font-size:22px;">设置</h3>
+        <div style="margin-bottom:14px;">
+            <label><input type="checkbox" id="snow-toggle"> 雪花效果</label>
+        </div>
+        <div style="margin-bottom:10px;">
+            <label>左头像QQ: <input type="text" id="nk1" style="width:120px;"></label>
+        </div>
+        <div style="margin-bottom:10px;">
+            <label>左昵称: <input type="text" id="nick1" style="width:120px;"></label>
+        </div>
+        <div style="margin-bottom:10px;">
+            <label>右头像QQ: <input type="text" id="nk2" style="width:120px;"></label>
+        </div>
+        <div style="margin-bottom:10px;">
+            <label>右昵称: <input type="text" id="nick2" style="width:120px;"></label>
+        </div>
+        <button id="save-setting" style="margin-top:10px;padding:6px 18px;font-size:16px;">保存</button>
+        <button id="close-setting" style="margin-top:10px;margin-left:10px;padding:6px 18px;font-size:16px;">关闭</button>
+    </div>
+    <div class="container">
+        <div class="profile-card left-card">
+            <div class="avatar-nickname">
+                <img id="avatar1" src="https://q1.qlogo.cn/g?b=qq&nk=3620060826&s=640" alt="My" class="avatar">
+                <h2 id="nickname1" class="nickname">傅卿何</h2>
+            </div>
+        </div>
+        <div class="profile-card right-card">
+            <div class="avatar-nickname">
+                <img id="avatar2" src="https://q1.qlogo.cn/g?b=qq&nk=3887742871&s=640" alt="Love" class="avatar">
+                <h2 id="nickname2" class="nickname">Rue九街道</h2>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 雪花动画效果
+        let snowInterval = null;
+        function createSnowflake() {
+            const snowflake = document.createElement('span');
+            snowflake.className = 'snowflake';
+            snowflake.innerText = '❄';
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.fontSize = (Math.random() * 12 + 12) + 'px';
+            snowflake.style.opacity = Math.random() * 0.5 + 0.5;
+            document.body.appendChild(snowflake);
+            const duration = Math.random() * 3 + 4;
+            snowflake.animate([
+                { transform: `translateY(0)` },
+                { transform: `translateY(${window.innerHeight + 40}px)` }
+            ], {
+                duration: duration * 1000,
+                easing: 'linear',
+            });
+            setTimeout(() => {
+                snowflake.remove();
+            }, duration * 1000);
+        }
+        function startSnow() {
+            if (!snowInterval) snowInterval = setInterval(createSnowflake, 200);
+        }
+        function stopSnow() {
+            if (snowInterval) { clearInterval(snowInterval); snowInterval = null; }
+        }
+        // 默认开启
+        startSnow();
+        document.getElementById('snow-toggle').checked = true;
+
+        // 设置按钮逻辑
+        const settingBtn = document.getElementById('setting-btn');
+        const settingPanel = document.getElementById('setting-panel');
+        settingBtn.onmouseenter = () => settingBtn.style.opacity = 1;
+        settingBtn.onmouseleave = () => settingBtn.style.opacity = 0.2;
+        settingBtn.onclick = function () {
+            updateSettingInputs();
+            settingPanel.classList.add('active');
+        };
+        document.getElementById('close-setting').onclick = () => settingPanel.classList.remove('active');
+
+        // 初始化设置面板内容
+        function updateSettingInputs() {
+            document.getElementById('nk1').value = getNk(document.getElementById('avatar1').src);
+            document.getElementById('nk2').value = getNk(document.getElementById('avatar2').src);
+            document.getElementById('nick1').value = document.getElementById('nickname1').innerText;
+            document.getElementById('nick2').value = document.getElementById('nickname2').innerText;
+        }
+        function getNk(url) {
+            const m = url.match(/nk=(\d+)/);
+            return m ? m[1] : '';
+        }
+
+        // 雪花开关
+        document.getElementById('snow-toggle').onchange = function () {
+            if (this.checked) startSnow();
+            else stopSnow();
+        };
+
+        // 保存设置
+        document.getElementById('save-setting').onclick = function () {
+            // 头像nk
+            const nk1 = document.getElementById('nk1').value.trim();
+            const nk2 = document.getElementById('nk2').value.trim();
+            document.getElementById('avatar1').src = `https://q1.qlogo.cn/g?b=qq&nk=${nk1}&s=640`;
+            document.getElementById('avatar2').src = `https://q1.qlogo.cn/g?b=qq&nk=${nk2}&s=640`;
+            // 昵称
+            document.getElementById('nickname1').innerText = document.getElementById('nick1').value;
+            document.getElementById('nickname2').innerText = document.getElementById('nick2').value;
+            settingPanel.classList.remove('active');
+        };
+    </script>
+</body>
+
+</html>
