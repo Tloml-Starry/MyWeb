@@ -6,64 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LifeTimer</title>
   <link rel="stylesheet" href="../assets/global.css">
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
-      overflow: hidden;
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 40px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      z-index: 1;
-    }
-
-    h1 {
-      color: white;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .nav-links {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-
-    .nav-link {
-      color: white;
-      text-decoration: none;
-      font-size: 18px;
-      padding: 10px 20px;
-      border-radius: 5px;
-      background: rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-
-    .nav-link:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .snowflake {
-      color: #fff;
-      position: absolute;
-      top: -20px;
-      z-index: 0;
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/lifetimer-home.css">
 </head>
 
 <body>
@@ -79,41 +22,7 @@
     </div>
   </div>
 
-  <script>
-    function createSnowflake() {
-      const snowflake = document.createElement('div');
-      snowflake.classList.add('snowflake');
-      snowflake.innerHTML = '❄';
-      snowflake.style.left = Math.random() * window.innerWidth + 'px';
-      snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
-      snowflake.style.opacity = Math.random();
-      snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
-
-      document.body.appendChild(snowflake);
-
-      setTimeout(() => {
-        snowflake.remove();
-      }, 5000);
-    }
-
-    setInterval(createSnowflake, 50);
-  </script>
-
-  <style>
-    @keyframes snowfall {
-      0% {
-        transform: translateY(0) rotate(0deg);
-      }
-
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-      }
-    }
-
-    .snowflake {
-      animation: snowfall linear forwards;
-    }
-  </style>
+  <script src="../assets/lifetimer-home.js"></script>
   <script src="../assets/theme.js"></script>
   <script>
     // 小屏适配：小于600px改为一列布局
