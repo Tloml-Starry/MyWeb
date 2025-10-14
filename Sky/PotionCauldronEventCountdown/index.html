@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>炼药锅活动倒计时</title>
+    <link rel="stylesheet" href="../../assets/global.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,6 +27,7 @@
             text-align: center;
             position: relative;
         }
+        body.light-theme .card { background-color: var(--surface); color: var(--text); border: 1px solid var(--border); }
         h1 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
@@ -144,6 +146,13 @@
         </div>
     </div>
 
+    <script src="../../assets/theme.js"></script>
+    <script>
+        if (window.SiteTheme) {
+            // 点击卡片右上角的信息按钮也可切换主题（示例）
+            window.SiteTheme.initToggle('#infoButton');
+        }
+    </script>
     <script>
         function updateCountdown() {
             const now = new Date();

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>光遇工具集合</title>
+    <link rel="stylesheet" href="../assets/global.css">
     <style>
         :root {
             --bg-light: #f0f0f0;
@@ -215,6 +216,13 @@
                 themeToggle.textContent = '切换到深色模式';
             }
         });
+    </script>
+    <script src="../assets/theme.js"></script>
+    <script>
+        // 让全局主题也随按钮切换（不影响原有 dark-mode 逻辑）
+        if (window.SiteTheme) {
+            window.SiteTheme.initToggle('.theme-toggle');
+        }
     </script>
 </body>
 </html>

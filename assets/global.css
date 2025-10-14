@@ -1,0 +1,80 @@
+/* Global base styles and responsive helpers */
+:root {
+  --primary: #6200ee;
+  --secondary: #03dac6;
+  --bg: #121212;
+  --surface: #1e1e1e;
+  --text: #e0e0e0;
+  --text-strong: #ffffff;
+  --border: #2a2a2a;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--primary);
+  color: var(--text-strong);
+  text-decoration: none;
+  background: transparent;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+/* Responsive helpers */
+.grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid.cols-1 { grid-template-columns: 1fr; }
+
+@media (max-width: 900px) {
+  .container { padding: 12px; }
+  .grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .container { padding: 10px; }
+  .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
+}
+
+/* Light theme override (toggle via body.light-theme) */
+body.light-theme {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --text-strong: #111827;
+  --border: #e5e7eb;
+}
+
+/* Utility spacing */
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 12px; }
+.mt-3 { margin-top: 16px; }
+.mt-4 { margin-top: 24px; }
+.center { text-align: center; }
+
+

@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LifeTimer</title>
+  <link rel="stylesheet" href="../assets/global.css">
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -113,6 +114,23 @@
       animation: snowfall linear forwards;
     }
   </style>
+  <script src="../assets/theme.js"></script>
+  <script>
+    // 小屏适配：小于600px改为一列布局
+    (function(){
+      function applyResponsive(){
+        const links = document.querySelector('.nav-links');
+        if (!links) return;
+        if (window.innerWidth <= 600) {
+          links.style.gridTemplateColumns = '1fr';
+        } else {
+          links.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        }
+      }
+      window.addEventListener('resize', applyResponsive);
+      applyResponsive();
+    })();
+  </script>
 </body>
 
 </html>

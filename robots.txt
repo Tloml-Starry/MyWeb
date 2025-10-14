@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tloml-starry.github.io/MyWeb/sitemap.xml
+
+

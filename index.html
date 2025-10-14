@@ -63,6 +63,14 @@
             text-align: center;
         }
 
+        /* Light theme overrides */
+        body.light-theme {
+            --background: #f7f7f7;
+            --surface: #ffffff;
+            --on-background: #1e1e1e;
+            --on-surface: #121212;
+        }
+
         .subtitle {
             font-size: 1.2rem;
             color: var(--secondary);
@@ -130,6 +138,13 @@
             color: var(--on-background);
         }
 
+        .feature-card a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+            height: 100%;
+        }
+
         footer {
             text-align: center;
             margin-top: 4rem;
@@ -158,15 +173,76 @@
             background-color: var(--primary);
             color: var(--on-surface);
         }
+
+        /* Dark mode toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 1000;
+        }
+
+        .theme-toggle button {
+            background: var(--surface);
+            color: var(--on-background);
+            border: 2px solid var(--primary);
+            border-radius: 999px;
+            padding: 0.5rem 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <div class="theme-toggle">
+            <button id="themeToggle" aria-label="切换主题">🌓</button>
+        </div>
         <header>
             <h1>MyWeb</h1>
             <p class="subtitle">无介绍</p>
         </header>
+
+        <h2>项目入口</h2>
+        <section class="features-grid">
+            <div class="feature-card">
+                <a href="./Sky/index.html">
+                    <h3>Sky / 光遇工具</h3>
+                    <p>包含身高查询、碎片查询等便捷小工具集合。</p>
+                </a>
+            </div>
+            <div class="feature-card">
+                <a href="./LifeTimer/index.html">
+                    <h3>LifeTimer / 生命计时</h3>
+                    <p>与时间相关的小页面集合，记录与提醒的重要时刻。</p>
+                </a>
+            </div>
+            <div class="feature-card">
+                <a href="./MyAndLove/index.html">
+                    <h3>MyAndLove</h3>
+                    <p>个人与所爱相关的小页入口。</p>
+                </a>
+            </div>
+            <div class="feature-card">
+                <a href="./BotHelp/index.html">
+                    <h3>BotHelp</h3>
+                    <p>机器人帮助页面与说明。</p>
+                </a>
+            </div>
+            <div class="feature-card">
+                <a href="./Sky/HeightQuery/index.html">
+                    <h3>光遇身高查询（直达）</h3>
+                    <p>输入密钥与ID，快速获取角色身高信息。</p>
+                </a>
+            </div>
+            <div class="feature-card">
+                <a href="./Sky/ShardQuery/index.html">
+                    <h3>光遇碎片查询（直达）</h3>
+                    <p>查询碎片相关信息与倒计时。</p>
+                </a>
+            </div>
+        </section>
 
         <footer>
             <h2>联系我们</h2>
@@ -177,6 +253,20 @@
             </div>
         </footer>
     </div>
+    <script>
+        (function() {
+            const body = document.body;
+            const toggleBtn = document.getElementById('themeToggle');
+            const stored = localStorage.getItem('theme');
+            if (stored === 'light') {
+                body.classList.add('light-theme');
+            }
+            toggleBtn.addEventListener('click', function() {
+                const isLight = body.classList.toggle('light-theme');
+                localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            });
+        })();
+    </script>
 </body>
 
 </html>

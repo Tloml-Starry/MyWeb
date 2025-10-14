@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>光遇碎石日历</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/global.css">
     <style>
         :root {
             --bg-color: #1a1a1a;
@@ -381,6 +382,12 @@
     </footer>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="../../assets/theme.js"></script>
+    <script>
+        if (window.SiteTheme) {
+            window.SiteTheme.initToggle('#darkModeToggle');
+        }
+    </script>
     <script>
         const maps = ['暮土', '禁阁', '云野', '雨林', '霞谷'];
         const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
