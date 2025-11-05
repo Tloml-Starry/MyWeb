@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光翼查询 - 光遇工具</title>
+    <link rel="stylesheet" href="../../assets/global.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">✨ 光翼查询</h1>
+                <button id="themeToggle" class="theme-btn" aria-label="切换主题">🌙</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Query Form Card -->
+            <div class="card query-card">
+                <div class="card-header">
+                    <h2 class="card-title">查询光翼</h2>
+                    <p class="card-subtitle">输入光遇ID进行查询</p>
+                </div>
+                <div class="card-body">
+                    <div class="input-wrapper">
+                        <label for="skyId" class="input-label">光遇ID</label>
+                        <input 
+                            type="text" 
+                            id="skyId" 
+                            class="input-field" 
+                            placeholder="请输入光遇ID"
+                            autocomplete="off"
+                        >
+                    </div>
+                    <button id="queryBtn" class="btn-primary">
+                        <span class="btn-text">查询</span>
+                        <span class="btn-loader" style="display: none;">⏳</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div id="resultsContainer" class="results-container" style="display: none;">
+                <!-- Combined Stats Card -->
+                <div class="card stats-card">
+                    <div class="card-header-compact">
+                        <h2 class="card-title">统计信息</h2>
+                    </div>
+                    <div class="card-body-compact" id="statsContent">
+                        <!-- Stats will be inserted here -->
+                    </div>
+                    <div class="card-body-compact" id="mapStatsContent" style="border-top: 1px solid var(--border-color); margin-top: 12px; padding-top: 12px;">
+                        <!-- Map stats will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Uncollected Wings Card (Collapsible) -->
+                <div class="card uncollected-card">
+                    <div class="card-header-compact collapsible-header" id="uncollectedHeader">
+                        <h2 class="card-title">未收集光翼</h2>
+                        <span class="collapse-icon">▼</span>
+                    </div>
+                    <div class="card-body-compact collapsible-content" id="uncollectedContent">
+                        <!-- Uncollected wings will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>加入我们的社区：</p>
+            <div class="footer-links">
+                <a href="https://qm.qq.com/q/1bZ5lnGlb" target="_blank" rel="noopener noreferrer">QQ群</a>
+                <a href="https://qm.qq.com/q/F9v743kcTK" target="_blank" rel="noopener noreferrer">添加好友</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
