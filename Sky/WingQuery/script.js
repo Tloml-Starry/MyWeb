@@ -660,10 +660,43 @@ function renderUncollectedByMap(uncollectedByMap) {
         return;
     }
 
-    // 按地图名称排序
+    // 按自定义地图顺序排序（优先使用用户指定的顺序），并进行若干名称归一化以兼容不同标签
+    const desiredOrder = ['晨岛', '云野', '雨林', '霞谷', '暮土', '禁阁', '伊甸', '破晓季', '复刻永久', '小黑屋'];
+
+    function normalizeMapForOrder(mapName) {
+        if (!mapName) return mapName;
+        // 常见变体归一化到指定分组
+        if (mapName.includes('禁阁')) return '禁阁';
+        if (mapName.includes('小黑屋') || mapName.includes('遇境') || mapName.includes('云巢')) return '小黑屋';
+        if (mapName.includes('破晓')) return '破晓季';
+        if (mapName.includes('复刻') || mapName.includes('永久') || mapName.includes('先祖永久')) return '复刻永久';
+        if (mapName.includes('伊甸') || mapName.includes('暴风眼')) return '伊甸';
+        if (mapName.includes('晨岛')) return '晨岛';
+        if (mapName.includes('云野')) return '云野';
+        if (mapName.includes('雨林')) return '雨林';
+        if (mapName.includes('霞谷')) return '霞谷';
+        if (mapName.includes('暮土')) return '暮土';
+        return mapName;
+    }
+
     const sortedMaps = Object.entries(uncollectedByMap)
         .filter(([map, wings]) => wings.length > 0)
-        .sort((a, b) => b[1].length - a[1].length);
+        .sort((a, b) => {
+            const aNorm = normalizeMapForOrder(a[0]);
+            const bNorm = normalizeMapForOrder(b[0]);
+            const ai = desiredOrder.indexOf(aNorm);
+            const bi = desiredOrder.indexOf(bNorm);
+
+            // 如果在自定义顺序中都存在，按指定顺序排序
+            if (ai !== -1 || bi !== -1) {
+                if (ai === -1) return 1; // a放后
+                if (bi === -1) return -1; // b放后
+                return ai - bi;
+            }
+
+            // 回退：按未收集数量降序
+            return b[1].length - a[1].length;
+        });
 
     const uncollectedHTML = `
         <div class="uncollected-list">
